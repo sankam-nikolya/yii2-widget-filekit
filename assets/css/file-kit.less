@@ -1,0 +1,68 @@
+.file-kit {
+
+  .hidden {
+    display: none;
+  }
+
+  .preview,
+  .upload {
+    position: relative;
+    border: 3px dashed gray;
+    border-radius: 5px;
+    padding: 3px;
+    width: 150px;
+    height: 100px;
+
+    input[type='file'] {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      cursor: pointer;
+      display: inline-block;
+    }
+  }
+
+  .preview {
+    a {
+      &:hover {
+        span {
+          visibility: visible;
+        }
+      }
+      &:focus {
+        outline: none;
+      }
+      span {
+        visibility: hidden;
+        background-color: black;
+        color: white;
+        padding: 4px;
+        border-radius: 5px;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      vertical-align: middle;
+      display: inline-block;
+    }
+  }
+
+  .upload span,
+  .preview a {
+    position: absolute;
+    font-size: 3em;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+    margin-top: -25px;
+    text-decoration: none;
+  }
+}
