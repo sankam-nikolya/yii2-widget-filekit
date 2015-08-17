@@ -10,30 +10,28 @@
         var $progress = $container.find('.progress-indicator');
 
         var methods = {
-            sleep: function (ms) {
-                ms += new Date().getTime();
-                while (new Date() < ms){}
-            },
             init: function() {
                 $deleteBtn.on('click', methods.removeItem);
                 $input.fileupload({
                     name: $input.prop('id'),
                     dataType: 'json',
-                    //add: function(e, data) {
-                    //    var uploadErrors = [];
-                    //    var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-                    //    if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
-                    //        uploadErrors.push('Not an accepted file type');
-                    //    }
-                    //    if(data.originalFiles[0]['size'].length && data.originalFiles[0]['size'] > 5000000) {
-                    //        uploadErrors.push('Filesize is too big');
-                    //    }
-                    //    if(uploadErrors.length > 0) {
-                    //        alert(uploadErrors.join("\n"));
-                    //    } else {
-                    //        data.submit();
-                    //    }
-                    //},
+                    add: function(e, data) {
+                        var uploadErrors = [];
+                        var acceptFileTypes = options.acceptFileTypes ? new RegExp(options.acceptFileTypes) : null;
+                        var maxFileSize = options.maxFileSize ? options.maxFileSize : 5 * 1024 * 1024;
+
+                        if(acceptFileTypes && data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
+                            uploadErrors.push('Not an accepted file type');
+                        }
+                        if(data.originalFiles.length && data.originalFiles[0]['size'] > maxFileSize) {
+                            uploadErrors.push('Filesize is too big: ' + data.originalFiles[0]['size'] + ' Bytes');
+                        }
+                        if(uploadErrors.length > 0) {
+                            console.log(uploadErrors.join("\n"));
+                        } else {
+                            data.submit();
+                        }
+                    },
                     start: function (e, data) {
                         methods.toggleProgress();
                     },
@@ -41,7 +39,7 @@
                         methods.afterAddItem(e, data);
                     },
                     fail: function (e, data) {
-                        console.log(data);
+                        console.log(data.errorThrown);
                     },
                     always: function (e, data) {
                         methods.toggleProgress();
@@ -67,6 +65,7 @@
             afterRemoveItem: function() {
                 methods.togglePreview();
                 $hidden.val('');
+                methods.removeUrlParam($deleteBtn.attr('href'), 'f');
             },
             afterAddItem: function(e, data) {
                 $hidden.val(data.result);
@@ -75,9 +74,21 @@
                     function (img) {
                         $preview.find('img').replaceWith(img);
                         methods.togglePreview();
-                        $deleteBtn.attr('href', options.deleteUrl + '?f=' + data.result);
+                        var $newUrl = methods.setUrlParam($deleteBtn.attr('href'), 'f', data.result);
+                        $deleteBtn.attr('href', $newUrl);
                     }
                 );
+            },
+            removeUrlParam: function(path, param) {
+                var url = new Url(path);
+                delete url.query[param];
+                return url;
+            },
+            setUrlParam: function(path, param, value) {
+                var url = new Url(path);
+                delete url.query[param];
+                url.query[param] = value;
+                return url;
             },
             togglePreview: function() {
                 $preview.toggleClass('hidden');

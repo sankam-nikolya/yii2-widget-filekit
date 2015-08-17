@@ -26,6 +26,7 @@ class FileUploadAsset extends AssetBundle
      * @var array
      */
     public $js = [
+        'js/url.js',
         'js/file-kit.js'
     ];
 

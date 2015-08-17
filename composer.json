@@ -13,8 +13,7 @@
     "require": {
         "yiisoft/yii2": "*",
         "yiisoft/yii2-jui": "~2.0.0",
-        "bower-asset/blueimp-file-upload": "~9.10.5",
-        "bower-asset/jsurl": "*"
+        "bower-asset/blueimp-file-upload": "~9.10.5"
     },
     "autoload": {
         "psr-4": {

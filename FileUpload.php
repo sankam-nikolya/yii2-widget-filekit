@@ -71,9 +71,7 @@ class FileUpload extends InputWidget
     {
         $this->view->registerAssetBundle(FileUploadAsset::className());
 
-        $options = Json::encode(ArrayHelper::merge($this->clientOptions, [
-           'removeUrl' => $this->deleteUrl,
-        ]));
+        $options = Json::encode($this->clientOptions);
         $this->view->registerJs("jQuery('#{$this->id}').yiiFileKit({$options});");
     }
 }
