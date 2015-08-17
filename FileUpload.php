@@ -3,7 +3,6 @@
 namespace vetoni\filekit;
 
 use yii\base\Exception;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\jui\InputWidget;
