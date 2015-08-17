@@ -36,12 +36,10 @@
 }
 .file-kit .preview img {
   width: 100%;
-  height: auto;
-  vertical-align: middle;
-  display: inline-block;
 }
 .file-kit .upload span,
-.file-kit .preview a {
+.file-kit .preview a,
+.file-kit .upload .progress-indicator {
   position: absolute;
   font-size: 3em;
   text-align: center;
@@ -52,4 +50,7 @@
   margin-left: -25px;
   margin-top: -25px;
   text-decoration: none;
+}
+.file-kit .upload .progress-indicator {
+  font-size: 2em;
 }

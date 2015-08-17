@@ -3,7 +3,9 @@
 namespace vetoni\filekit;
 
 use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\jui\InputWidget;
 
 /**
@@ -20,7 +22,12 @@ class FileUpload extends InputWidget
     /**
      * @var
      */
-    public $removeUrl;
+    public $deleteUrl;
+
+    /**
+     * @var array
+     */
+    public $clientOptions = [];
 
     /**
      * @throws Exception
@@ -32,8 +39,8 @@ class FileUpload extends InputWidget
             throw new Exception('uploadUrl property should be set');
         }
 
-        if (!isset($this->removeUrl)) {
-            throw new Exception('removeUrl property should be set');
+        if (!isset($this->deleteUrl)) {
+            throw new Exception('deleteUrl property should be set');
         }
     }
 
@@ -54,7 +61,7 @@ class FileUpload extends InputWidget
             'fid' => $attributeValue,
             'url' => isset($file) ? $file->url : null,
             'uploadUrl' => $this->uploadUrl,
-            'removeUrl' => $this->removeUrl,
+            'deleteUrl' => $this->deleteUrl,
         ]);
     }
     /**
@@ -63,6 +70,10 @@ class FileUpload extends InputWidget
     protected function registerClientScript()
     {
         $this->view->registerAssetBundle(FileUploadAsset::className());
-        $this->view->registerJs("jQuery('#{$this->id}').yiiFileKit({removeUrl: '{$this->removeUrl}'});");
+
+        $options = Json::encode(ArrayHelper::merge($this->clientOptions, [
+           'removeUrl' => $this->deleteUrl,
+        ]));
+        $this->view->registerJs("jQuery('#{$this->id}').yiiFileKit({$options});");
     }
 }

@@ -7,10 +7,10 @@ use yii\base\Action;
 use yii\helpers\Json;
 
 /**
- * Class RemoveAction
+ * Class DeleteAction
  * @package vetoni\filekit\actions
  */
-class RemoveAction extends Action
+class DeleteAction extends Action
 {
     /**
      * @var
@@ -25,7 +25,10 @@ class RemoveAction extends Action
         $this->fileParam = \Yii::$app->request->get('f');
     }
 
-
+    /**
+     * @return string
+     * @throws HttpException
+     */
     public function run()
     {
         $file = File::findOne(['fid' => $this->fileParam]);
