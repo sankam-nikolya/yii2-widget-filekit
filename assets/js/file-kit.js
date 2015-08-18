@@ -1,3 +1,13 @@
+/*!
+ * Simple upload file kit based on BlueImp jQuery plugin.
+ * Basically it's a simplified version of trntv/yii2-file-kit plugin.
+ * Depends on jQuery and jsurl libraries.
+ * @see https://github.com/trntv/yii2-file-kit
+ * @see https://github.com/Mikhus/jsurl
+ * @license MIT
+ * @author Vetoni <vetoni.github@gmail.com>
+ */
+
 (function ( $ ) {
     jQuery.fn.yiiFileKit = function(options) {
 
@@ -11,26 +21,19 @@
 
         var methods = {
             init: function() {
-                $deleteBtn.on('click', methods.removeItem);
+
+                if (options.width) {
+                    $container.css('width', options.width);
+                }
+                if (options.height) {
+                    $container.css('height', options.height);
+                }
+
                 $input.fileupload({
                     name: $input.prop('id'),
                     dataType: 'json',
                     add: function(e, data) {
-                        var uploadErrors = [];
-                        var acceptFileTypes = options.acceptFileTypes ? new RegExp(options.acceptFileTypes) : null;
-                        var maxFileSize = options.maxFileSize ? options.maxFileSize : 5 * 1024 * 1024;
-
-                        if(acceptFileTypes && data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
-                            uploadErrors.push('Not an accepted file type');
-                        }
-                        if(data.originalFiles.length && data.originalFiles[0]['size'] > maxFileSize) {
-                            uploadErrors.push('Filesize is too big: ' + data.originalFiles[0]['size'] + ' Bytes');
-                        }
-                        if(uploadErrors.length > 0) {
-                            console.log(uploadErrors.join("\n"));
-                        } else {
-                            data.submit();
-                        }
+                        methods.addItem(e, data);
                     },
                     start: function (e, data) {
                         methods.toggleProgress();
@@ -50,6 +53,29 @@
                         $progress.text(progress + '%');
                     }
                 });
+                $deleteBtn.on('click', methods.removeItem);
+            },
+            addItem: function(e, data) {
+                var uploadErrors = [];
+
+                var acceptFileTypes = options.acceptFileTypes ?
+                    new RegExp(options.acceptFileTypes) : null;
+
+                var maxFileSize = options.maxFileSize ?
+                    options.maxFileSize : 5 * 1024 * 1024;
+
+                if(acceptFileTypes && data.originalFiles.length
+                    && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
+                    uploadErrors.push('Not an accepted file type');
+                }
+                if(data.originalFiles.length && data.originalFiles[0]['size'] > maxFileSize) {
+                    uploadErrors.push('Filesize is too big: ' + data.originalFiles[0]['size'] + ' Bytes');
+                }
+                if(uploadErrors.length > 0) {
+                    console.log(uploadErrors.join("\n"));
+                } else {
+                    data.submit();
+                }
             },
             removeItem: function(e) {
                 var $this = $(this);
@@ -62,11 +88,6 @@
                     }
                 });
             },
-            afterRemoveItem: function() {
-                methods.togglePreview();
-                $hidden.val('');
-                methods.removeUrlParam($deleteBtn.attr('href'), 'f');
-            },
             afterAddItem: function(e, data) {
                 $hidden.val(data.result);
                 loadImage(
@@ -78,6 +99,11 @@
                         $deleteBtn.attr('href', $newUrl);
                     }
                 );
+            },
+            afterRemoveItem: function() {
+                methods.togglePreview();
+                $hidden.val('');
+                methods.removeUrlParam($deleteBtn.attr('href'), 'f');
             },
             removeUrlParam: function(path, param) {
                 var url = new Url(path);
