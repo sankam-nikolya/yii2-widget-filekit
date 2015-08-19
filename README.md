@@ -2,8 +2,8 @@ vetoni/yii2-widget-filekit
 ============================
 Simple upload file kit based on BlueImp jQuery plugin.
 Basically it's a simplified version of trntv/yii2-file-kit plugin.
-Main idea of this plugin to use it in common scenarios, such as saving images linked to model. 
-Like user photo, product thumbnail etc. It does not support multiple file uploads.
+Main idea of this plugin is using it in typical model update scenarios, such as saving linked images, like user photo, product thumbnail etc. 
+Plugin does not support multiple file uploads at this moment. 
 Also it requires a separate 'file' table in your database and web accessible file storage for uploaded images (inside web root dir).
 
 Installation
