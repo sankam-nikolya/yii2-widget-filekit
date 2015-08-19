@@ -9,7 +9,7 @@
  */
 
 (function ( $ ) {
-    jQuery.fn.yiiFileKit = function(options) {
+    $.fn.yiiFileKit = function(options) {
 
         var $input = this;
         var $container = $input.closest('.file-kit');
@@ -48,7 +48,6 @@
                         methods.toggleProgress();
                     },
                     progressall: function (e, data) {
-                        methods.sleep(100);
                         var progress = parseInt(data.loaded / data.total * 100, 10);
                         $progress.text(progress + '%');
                     }
